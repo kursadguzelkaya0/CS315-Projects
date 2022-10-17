@@ -1,0 +1,34 @@
+@BEGIN
+
+const int SOUND_LEVEL_UPPER_LIMIT = 120
+
+int newCount
+int counter
+counter = 10
+
+int incrementCount( int i ) {
+  return i++
+}
+
+void incrementCountVoid( int i ) {
+  return i++
+}
+
+int multiplyCount( int i, int mult ) {
+  if (i < SOUND_LEVEL_UPPER_LIMIT) {
+    i = i * mult 
+  }
+}
+
+int divideCount( int i, int divisor) {
+  if (i > SOUND_LEVEL_UPPER_LIMIT){
+    i = i / divisor
+  }
+}
+
+newCount = incrementCount(counter)
+incrementCountVoid(newCount)
+newCount = multiplyCount(10, 15)
+newCount = divideCount(10, 10)
+
+@END

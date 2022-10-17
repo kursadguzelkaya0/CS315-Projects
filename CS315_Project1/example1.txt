@@ -1,0 +1,79 @@
+@BEGIN
+
+/* This is an example program for the mamba language that shows basic structures and case special functions */
+
+/* Define constants */
+const int HUMIDITY_UPPER_LIMIT= 55
+const int HUMIDITY_LOWER_LIMIT= 0
+const int SOUND_LEVEL_UPPER_LIMIT = 120
+const int SOUND_LEVEL_LOWER_LIMIT = 0
+const int NIGHT_TIME = 22
+
+/* Define pointers */
+ptr humiditySensor
+ptr airPressureSensor
+ptr lightSensor
+ptr airQuality
+ptr soundLevel
+
+int switchOne = 1
+int switchTwo = 2
+int switchThree = 3
+int switchFour = 4
+
+/* Create necessary sensors */
+humiditySensor = ADD_SENSOR("humidity")
+airPressureSensor = ADD_SENSOR("airPressure")
+lightSensor = ADD_SENSOR("light")
+airQualitySensor = ADD_SENSOR("air")
+soundSensor = ADD_SENSOR("sound")
+
+/* Check humidity */
+int humidity = READ_SENSOR(“humidity”);
+
+if ((humidity >= HUMIDITY_UPPER_LIMIT) OR (humidity < HUMIDITY_LOWER_LIMIT)) {
+	if (GET_SWITCH_STATUS(switchOne)) {
+		SET_SWITCH_OFF(switchOne)
+	} else {
+		SET_SWITCH_ON(switchTwo)
+	}
+}
+
+/* Check sound level */
+bool isSoundOverLimit = false
+
+int soundLevel = READ_SENSOR("sound")
+bool isSoundOverLimit = soundLevel > SOUND_LEVEL_UPPER_LIMIT
+
+if ((GET_CURR_TIMESTAMP >= NIGHT_TIME) AND isSoundOverLimit) {
+	
+  CREATE_URL_CONNECTION("www.soundoverwarning.com")
+
+  SEND_DATA("www.soundoverwarning.com", soundLevel)
+
+  int takenData = RECIEVE_DATA("www.soundoverwarning.com")
+
+  if (takenData % 2 == 3) {
+		SET_SWITCH_OFF(switchThree)
+  } else {
+		SET_SWITCH_ON(switchFour)
+  }
+
+  DISCONNECT_URL("www.soundoverwarning.com")
+}
+
+/*See connections and sensors before quit */
+SEE_ALL_CONNECTIONS()
+SEE_ALL_SENSORS()
+
+/* Remove unused sensors */
+REMOVE_SENSOR("airPressure")
+REMOVE_SENSOR("light")
+REMOVE_SENSOR("air")
+
+/* Remove all connections before leave */
+RESET_ALL_CONNECTIONS()
+
+
+
+@END
